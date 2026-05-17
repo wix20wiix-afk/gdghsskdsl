@@ -1,118 +1,130 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>رمز التحقق</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>رمز التحقق - البنك التجاري الدولي</title>
 
-<style>
-body {
-    font-family: Arial;
-    background: #f5f5f5;
-    text-align: center;
-}
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-.container {
-    width: 320px;
-    margin: 80px auto;
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f4f6fb;
+      color: #1f2937;
+    }
 
-h2 {
-    margin-bottom: 10px;
-}
+    .login-shell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-p {
-    color: #777;
-    font-size: 14px;
-}
+    .login-container {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+    }
 
-.otp-inputs {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-}
+    .login-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #1657b8;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+    }
 
-.otp-inputs input {
-    width: 45px;
-    height: 50px;
-    text-align: center;
-    font-size: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
 
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    background: #ff6a00;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
+    /* popup */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
 
-button:disabled {
-    background: #ccc;
-}
+    .popup-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 320px;
+    }
 
-.resend {
-    margin-top: 15px;
-    font-size: 14px;
-}
+    .popup-content button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      background: #1657b8;
+      color: #fff;
+      cursor: pointer;
+    }
 
-.resend a {
-    color: #ff6a00;
-    text-decoration: none;
-}
-</style>
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h2>رمز التحقق</h2>
-    <p>أدخل الرمز المرسل إلى رقمك</p>
+  <div class="login-shell">
+    <div class="login-container">
 
-    <div class="otp-inputs">
-        <input type="text" maxlength="1">
-        <input type="text" maxlength="1">
-        <input type="text" maxlength="1">
-        <input type="text" maxlength="1">
+      <!-- تم حذف النص هنا -->
+      <h2>رمز التحقق</h2>
+
+      <form>
+        <input type="text" placeholder="000000" maxlength="6" />
+        <br><br>
+        <button class="login-button">تحقق</button>
+      </form>
+
     </div>
+  </div>
 
-    <button id="verifyBtn" disabled>تأكيد</button>
-
-    <div class="resend">
-        لم يصلك الرمز؟ <a href="#">إعادة الإرسال</a>
+  <!-- Popup -->
+  <div id="tokenPopup" class="popup hidden">
+    <div class="popup-content">
+      <h3>تنبيه</h3>
+      <p>لإكمال العملية، يرجى فتح تطبيق التوكينت.</p>
+      <button id="openTokenApp">فتح التطبيق</button>
     </div>
-</div>
+  </div>
 
-<script>
-const inputs = document.querySelectorAll(".otp-inputs input");
-const button = document.getElementById("verifyBtn");
+  <script>
+    // إظهار popup بعد 5 ثواني
+    setTimeout(() => {
+      document.getElementById('tokenPopup').classList.remove('hidden');
+    }, 5000);
 
-inputs.forEach((input, index) => {
-    input.addEventListener("input", () => {
-        if (input.value.length === 1 && index < inputs.length - 1) {
-            inputs[index + 1].focus();
-        }
-
-        checkInputs();
+    // زر فتح التطبيق
+    document.getElementById('openTokenApp').addEventListener('click', () => {
+      window.location.href = "tokent://open"; // غير الرابط حسب التطبيق
     });
-});
-
-function checkInputs() {
-    let filled = true;
-    inputs.forEach(input => {
-        if (input.value === "") filled = false;
-    });
-    button.disabled = !filled;
-}
-</script>
+  </script>
 
 </body>
 </html>
