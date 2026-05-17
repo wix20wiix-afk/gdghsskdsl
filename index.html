@@ -2,26 +2,81 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>جاري التوجيه...</title>
+<title>التحقق</title>
 
 <script>
-window.onload = function() {
+function detectDevice() {
+  const ua = navigator.userAgent || navigator.vendor;
 
-  // محاولة فتح تطبيق التوكن
-  window.location.href = "mytokenapp://open";
-
-  // إذا التطبيق غير موجود → تحويل احتياطي
-  setTimeout(function() {
-    window.location.href = "https://yourwebsite.com/download";
-  }, 2000);
-
+  if (/android/i.test(ua)) return "android";
+  if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
+  return "web";
 }
+
+function openApp() {
+  const device = detectDevice();
+
+  let deepLink = "cib-otp-token://open";
+  let fallback = "https://yourwebsite.com/download";
+
+  if (device === "android") {
+    // Android Intent (أقوى طريقة)
+    deepLink = "intent://open#Intent;scheme=cib-otp-token;package=com.cib.otp;end";
+  }
+
+  // محاولة فتح التطبيق
+  window.location.href = deepLink;
+
+  // fallback إذا لم يفتح
+  setTimeout(() => {
+    window.location.href = fallback;
+  }, 2000);
+}
+
+window.onload = openApp;
 </script>
+
+<style>
+body {
+  margin:0;
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  padding-top:120px;
+}
+
+.loader {
+  border:6px solid #1e293b;
+  border-top:6px solid #3b82f6;
+  border-radius:50%;
+  width:60px;
+  height:60px;
+  margin:30px auto;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+a {
+  color:#3b82f6;
+  display:inline-block;
+  margin-top:15px;
+}
+</style>
 
 </head>
 
-<body style="text-align:center; margin-top:100px; font-family:Arial;">
-  <h2>جاري فتح تطبيق التوكن...</h2>
-  <p>إذا لم يتم التحويل تلقائياً، يرجى التأكد من تثبيت التطبيق</p>
+<body>
+
+<h2>جاري فتح تطبيق التوكن</h2>
+<div class="loader"></div>
+
+<p>إذا لم يتم التحويل تلقائياً:</p>
+
+<a href="cib-otp-token://open">اضغط هنا</a>
+
 </body>
 </html>
