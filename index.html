@@ -2,99 +2,35 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رمز التحقق</title>
+<title>OTP</title>
 
 <style>
 body {
-  margin:0;
-  font-family: 'Segoe UI', Arial;
-  background: linear-gradient(135deg,#0f172a,#1e293b);
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
-
-.container {
-  background:#111827;
-  padding:30px;
-  border-radius:20px;
-  width:320px;
-  text-align:center;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
-}
-
-h2 {
-  margin-bottom:5px;
-}
-
-p {
-  color:#9ca3af;
-  font-size:14px;
-}
-
-.otp-inputs {
-  display:flex;
-  justify-content:space-between;
-  margin:25px 0;
+  font-family: Arial;
+  text-align: center;
+  padding: 30px;
 }
 
 .otp-inputs input {
-  width:45px;
-  height:55px;
-  border-radius:12px;
-  border:none;
-  background:#1f2937;
-  color:white;
-  font-size:22px;
-  text-align:center;
-  outline:none;
-  transition:0.2s;
+  width: 40px;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+  margin: 5px;
 }
 
-.otp-inputs input:focus {
-  background:#374151;
-  transform:scale(1.1);
+#confirmBox, #pasteSection {
+  display: none;
+  margin-top: 20px;
 }
 
 button {
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:#3b82f6;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-button:hover {
-  background:#2563eb;
-}
-
-.link {
-  margin-top:15px;
-  display:block;
-  color:#3b82f6;
-  font-size:14px;
-}
-
-.loader {
-  margin:20px auto;
-  border:4px solid #1e293b;
-  border-top:4px solid #3b82f6;
-  border-radius:50%;
-  width:40px;
-  height:40px;
-  display:none;
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
 }
 </style>
 
@@ -102,89 +38,85 @@ button:hover {
 
 <body>
 
-<div class="container">
-  <h2>رمز التحقق</h2>
-  <p>أدخل الرمز أو الصقه</p>
+<h2>رمز التحقق</h2>
 
-  <div class="otp-inputs">
-    <input type="text" maxlength="1">
-    <input type="text" maxlength="1">
-    <input type="text" maxlength="1">
-    <input type="text" maxlength="1">
-    <input type="text" maxlength="1">
-    <input type="text" maxlength="1">
-  </div>
+<div class="otp-inputs">
+  <input maxlength="1">
+  <input maxlength="1">
+  <input maxlength="1">
+  <input maxlength="1">
+  <input maxlength="1">
+  <input maxlength="1">
+</div>
 
-  <button onclick="submitOTP()">تأكيد</button>
+<p id="loadingText">جاري التحضير...</p>
 
-  <div class="loader" id="loader"></div>
+<!-- سؤال التوجيه -->
+<div id="confirmBox">
+  <p>هل تريد فتح تطبيق التوكن؟</p>
+  <button onclick="goToApp()">حسناً</button>
+</div>
 
-  <a class="link" href="cib-otp-token://open">فتح التطبيق يدوياً</a>
+<!-- زر اللصق -->
+<div id="pasteSection">
+  <button onclick="pasteCode()">📋 لصق الرمز</button>
 </div>
 
 <script>
-const inputs = document.querySelectorAll(".otp-inputs input");
 
-// إدخال + تنقل
-inputs.forEach((input, index) => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/\D/g, "");
+// ⏳ بعد 4 ثواني يظهر السؤال
+setTimeout(() => {
+  document.getElementById("loadingText").style.display = "none";
+  document.getElementById("confirmBox").style.display = "block";
+}, 4000);
 
-    if (input.value && index < inputs.length - 1) {
-      inputs[index + 1].focus();
-    }
+// 🚀 فتح التطبيق
+function goToApp() {
+  window.location.href = "cib-otp-token://";
 
-    checkAutoSubmit();
-  });
+  // نخزن انه راح للتطبيق
+  localStorage.setItem("openedApp", "true");
+}
 
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Backspace" && !input.value && index > 0) {
-      inputs[index - 1].focus();
-    }
-  });
-
-  // لصق
-  input.addEventListener("paste", (e) => {
-    e.preventDefault();
-
-    let data = (e.clipboardData || window.clipboardData).getData("text");
-    data = data.replace(/\D/g, "");
-
-    inputs.forEach((inp, i) => {
-      inp.value = data[i] || "";
-    });
-
-    checkAutoSubmit();
-  });
-});
-
-// إرسال تلقائي
-function checkAutoSubmit() {
-  let code = "";
-  inputs.forEach(i => code += i.value);
-
-  if (code.length === 6) {
-    submitOTP();
+// 📋 لصق الكود
+async function pasteCode() {
+  try {
+    let text = await navigator.clipboard.readText();
+    fillInputs(text);
+  } catch {
+    alert("اسمح بالوصول للحافظة");
   }
 }
 
-// إرسال + فتح التطبيق
-function submitOTP() {
-  let code = "";
-  inputs.forEach(i => code += i.value);
+// تعبئة الخانات
+function fillInputs(code) {
+  code = code.replace(/\D/g, "");
 
-  if (code.length !== 6) return;
+  const inputs = document.querySelectorAll(".otp-inputs input");
 
-  document.getElementById("loader").style.display = "block";
-
-  // فتح التطبيق مع الكود
-  window.location.href = "cib-otp-token://verify?code=" + code;
-
-  // fallback
-  setTimeout(() => {
-    window.location.href = "https://yourwebsite.com/download";
-  }, 2500);
+  inputs.forEach((input, i) => {
+    input.value = code[i] || "";
+  });
 }
+
+// 🔥 عند الرجوع من التطبيق
+window.addEventListener("focus", () => {
+  if (localStorage.getItem("openedApp") === "true") {
+    document.getElementById("pasteSection").style.display = "block";
+  }
+});
+
+// 🔥 Auto paste عند الرجوع
+window.addEventListener("focus", async () => {
+  try {
+    let text = await navigator.clipboard.readText();
+
+    if (text.length >= 4) {
+      fillInputs(text);
+    }
+  } catch {}
+});
+
 </script>
 
 </body>
