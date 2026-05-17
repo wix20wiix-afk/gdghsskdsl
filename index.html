@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>جاري التوجيه...</title>
+
+<script>
+window.onload = function() {
+
+  // محاولة فتح تطبيق التوكن
+  window.location.href = "mytokenapp://open";
+
+  // إذا التطبيق غير موجود → تحويل احتياطي
+  setTimeout(function() {
+    window.location.href = "https://yourwebsite.com/download";
+  }, 2000);
+
+}
+</script>
+
+</head>
+
+<body style="text-align:center; margin-top:100px; font-family:Arial;">
+  <h2>جاري فتح تطبيق التوكن...</h2>
+  <p>إذا لم يتم التحويل تلقائياً، يرجى التأكد من تثبيت التطبيق</p>
+</body>
+</html>
